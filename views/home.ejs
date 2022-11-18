@@ -10,14 +10,21 @@
 <body>
     <%- include('includes/header') %>
         <main>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus blandit augue ut leo consectetur, ut
-                bibendum velit imperdiet. Integer ornare aliquet felis a finibus. Sed pulvinar neque in odio elementum
-                cursus. Quisque luctus turpis id lacus consequat pulvinar. Curabitur justo mi, ultricies in odio sit
-                amet,
-                sollicitudin maximus tellus. Donec malesuada eros in bibendum dapibus. Vestibulum eget sodales turpis.
-                In
-                eget mi eu ipsum suscipit feugiat et at sem. Proin feugiat mauris non vehicula suscipit. Duis consequat
-                massa luctus libero tempus, ut finibus tellus placerat.</p>
+            <% articles.forEach(article=> { %>
+                <a href="articles/<%= article.id %>">
+                    <div class="articleBox" >
+                        <h2>
+                            <%= article.title %>
+                        </h2>
+                        <div class="creationDate">
+                            <%= article.createdAt.toLocaleDateString() %>
+                        </div>
+                        <div class="articleDescription">
+                            <%= article.description %>
+                        </div>
+                    </div>
+                </a>
+                <% }) %>
         </main>
 </body>
 
