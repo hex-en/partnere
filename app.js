@@ -2,6 +2,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 import { articleRouter } from './routes/articles.js'
 import { Article } from './models/article.js'
+import methodOverride from 'method-override'
 
 
 const app = express()
@@ -14,7 +15,7 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use(express.static('public'))
 app.use('/assets', express.static('public'))
-
+app.use(methodOverride('_method'))
 
 app.get('/', async (request, response) => {
     const articles = await Article.find().sort({ createdAt: 'desc' })
@@ -29,6 +30,10 @@ app.post('/contact', (request, response) => {
 })
 app.get('/login', (request, response) => {
     response.render('login')
+})
+app.get('/articles', async (request, response) => {
+    const articles = await Article.find().sort({ createdAt: 'desc' })
+    response.render('articles', { articles: articles })
 })
 
 app.use('/articles', articleRouter)

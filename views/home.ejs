@@ -11,7 +11,7 @@
     <%- include('includes/header') %>
         <main>
             <% articles.forEach(article=> { %>
-                <a href="articles/<%= article.id %>">
+                <a href="articles/<%= article.slug %>">
                     <div class="articleBox" >
                         <h2>
                             <%= article.title %>
