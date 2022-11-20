@@ -1,15 +1,15 @@
 import express from 'express'
-import mongoose from 'mongoose'
+import { mongoose } from 'mongoose'
 import { articleRouter } from './routes/articles.js'
 import { Article } from './models/article.js'
 import methodOverride from 'method-override'
+
 
 
 const app = express()
 const PORT = 3000
 
 mongoose.connect('mongodb://localhost/blog')
-
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: false }))
 
@@ -21,16 +21,14 @@ app.get('/', async (request, response) => {
     const articles = await Article.find().sort({ createdAt: 'desc' })
     response.render('home', { articles: articles })
 })
-app.get('/contact', (request, response) => {
-    response.render('contact')
-})
-app.post('/contact', (request, response) => {
-    console.log('Contact form submission: ')
-    response.send('Thank you for your message. We will be in touch soon.')
-})
+
 app.get('/login', (request, response) => {
     response.render('login')
 })
+app.post('/login', (request, response) => {
+    response.render('login')
+})
+
 app.get('/articles', async (request, response) => {
     const articles = await Article.find().sort({ createdAt: 'desc' })
     response.render('articles', { articles: articles })

@@ -19,25 +19,17 @@ articleRouter.get('/:slug', async (request, response) => {
     response.render('articles/show', { article: article })
 })
 
-articleRouter.post('/', async (request, response) => {
-    let article = new Article({
-        title: request.body.title,
-        description: request.body.description,
-        markdown: request.body.markdown
-    })
-    try {
-        article = await article.save()
-        response.redirect(`/articles/${article.slug}`)
-    } catch (e) {
-        console.log(e)
-        response.render('articles/new', { article: article })
-    }
+articleRouter.post('/', async (request, response, next) => {
+    request.article = new Article()
+    next()
+}, saveArticleAndRedirect('new'))
 
-})
+articleRouter.put('/:id', async (request, response, next) => {
+    request.article = await Article.findById(request.params.id)
+    next()
+}, saveArticleAndRedirect('edit'))
 
-articleRouter.put('/:id', (request, response) => {
 
-})
 
 articleRouter.delete('/:id', async (request, response) => {
     await Article.findByIdAndDelete(request.params.id)
@@ -45,8 +37,20 @@ articleRouter.delete('/:id', async (request, response) => {
 })
 
 function saveArticleAndRedirect(path) {
-    return(request, response) => {
-        
+    return async (request, response) => {
+        let article = request.article
+        article.title = request.body.title,
+            article.description = request.body.description,
+            article.markdown = request.body.markdown
+
+        try {
+            article = await article.save()
+            response.redirect(`/articles/${article.slug}`)
+        } catch (e) {
+            console.log(e)
+            response.render(`articles/${path}`, { article: article })
+        }
+
     }
 }
 
